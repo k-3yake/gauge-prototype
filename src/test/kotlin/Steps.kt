@@ -17,6 +17,7 @@ public class Steps {
         }
     }
 
+
     @Step("The word <word> has <expectedCount> vowels.")
     fun verifyVowelsCountInWord(word: String, expectedCount: Int) {
         val actualCount = countVowels(word)
