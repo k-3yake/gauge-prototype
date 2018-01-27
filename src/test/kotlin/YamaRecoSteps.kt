@@ -10,29 +10,34 @@ import java.net.URL
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
+import java.io.File
 
 public class YamaRecoSteps {
 
     var areaList: AreaListDto? = null
 
-    @Step("エリアリストを取得する")
-    fun setAreaList(){
-        areaList = getAreaListResult()
-        print(areaList)
+    @Step("エリアリストを<url>から取得します")
+    fun setAreaList(url: String){
+        areaList = convertAreaListDto(connect("https://api.yamareco.com/api/v1" + url))
     }
 
-    @Step("エリアリストには全<areaCount>の地域がある")
+    @Step("エリアリストには全<areaCount>の地域があります")
     fun verifyAreacount(areaCount: Int){
         assertThat(areaList?.arealist?.size,`is`(areaCount))
     }
 
-    @Step("その地域には以下の様な国内から海外までの地域がidと名前で定義されている <areas>")
+    @Step("その地域には以下の様に国内から海外まで、各地域がidと名前の組み合わせで定義されています <areas>")
     fun verifyAreaDetail(areas: Table){
         areas.tableRows.map {  r ->
-            AreaDto(Integer.parseInt(r.getCell("id")),r.getCell("地域名"))
+            AreaDto(Integer.parseInt(r.getCell("id")),r.getCell("名前"))
         }.forEach{ e ->
             Assert.assertEquals("Not contain " + e + " in " + areaList,true,areaList!!.arealist.contains(e))
         }
+    }
+
+    @Step("実行結果のjson例はこちらをご覧ください <file:./src/test/resources/getAreaListExample.json>")
+    fun verifyJson(file: String){
+        Assert.assertEquals(convertAreaListDto(file),areaList)
     }
 
     data class AreaListDto (
@@ -44,10 +49,9 @@ public class YamaRecoSteps {
             val area:   String
     )
 
-    fun getAreaListResult(): AreaListDto? {
-        val tmp = connect("https://api.yamareco.com/api/v1/getArealist")
+    fun convertAreaListDto(json: String): AreaListDto? {
         return Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                .adapter(AreaListDto::class.java).fromJson(tmp)
+                .adapter(AreaListDto::class.java).fromJson(json)
     }
 
     fun connect(requestUrl: String): String {
