@@ -1,2 +1,1 @@
-# gauge-prototype
-gaugeによるe2e
+# My project's README
