@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.forcas</groupId>
-    <artifactId>gateway-e2e</artifactId>
+    <groupId>org.k-3yake</groupId>
+    <artifactId>gauge-prototype</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
