@@ -1,1 +1,1 @@
-docker run -it -v "`pwd`/..":"/gauge-prototype" gauge-prototype:latest  sh -c 'gauge run /gauge-prototype/specs/'
+docker run --rm -v "`pwd`/..":"/gauge-prototype" -v "$HOME/.m2":"/root/.m2" gauge-prototype:latest  sh -c 'cd /gauge-prototype;mvn test'
